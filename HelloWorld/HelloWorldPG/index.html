@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Title of the document</title>
+	</head>
+
+	<body>
+		The <mark>teste</mark> content of the document......<command label="testeCommand">TesteCommand</command>
+		<canvas id="myCanvas" width="200" height="100"></canvas>
+
+		<label>Cor:</label>
+		<input id="color" type="text" value="" alt="Digite o nome da cor (em inglês) ou o código hex.">
+
+		<input type="button" value="Criar Retângulo" onclick="javascript:desenharRetangulo();" />
+		<script type="text/javascript">
+			function desenharRetangulo() {
+				var c = document.getElementById("myCanvas");
+				var color = document.getElementById("color").value;
+				var ctx = c.getContext("2d");
+				ctx.fillStyle = color;
+				ctx.fillRect(0,0,150,75);
+				document.getElementById("result").innerHTML = "Last color: " + localStorage.lastColor;
+			}
+		</script>
+		<div id="result"></div>
+		<script>
+			if (typeof(Storage) !== "undefined") {
+			  localStorage.lastColor = document.getElementById("color").value;
+			  document.getElementById("color").value = localStorage.lastColor;
+			  document.getElementById("result").innerHTML="Last color: " + localStorage.lastColor;
+
+		  } else {
+			  document.getElementById("result").innerHTML = "Sorry, your browser does not support web storage...";
+		  }
+		</script>
+	</body>
+
+</html> 
