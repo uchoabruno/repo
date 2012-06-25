@@ -2,6 +2,40 @@
 <html>
 	<head>
 		<title>Tela Inicial</title>
+		<script src="phonegap.js" type="text/javascript" charset="utf-8"></script>
+	    <script type="text/javascript" charset="utf-8">
+		    // Wait for Cordova to load
+		    //
+		    document.addEventListener("deviceready", onDeviceReady, false);
+		
+		    // Cordova is ready
+		    //
+		    function onDeviceReady() {
+		        // Empty
+		    }
+		
+		    // Show a custom alert
+		    //
+		    function showAlert() {
+		        navigator.notification.alert(
+		            'You are the winner!',  // message
+		            'Game Over',            // title
+		            'Done'                  // buttonName
+		        );
+		    }
+		
+		    // Beep three times
+		    //
+		    function playBeep() {
+		        navigator.notification.beep(3);
+		    }
+		
+		    // Vibrate for 2 seconds
+		    //
+		    function vibrate() {
+		        navigator.notification.vibrate(2000);
+		    }
+	    </script>
 	</head>
 
 	<body>
@@ -17,6 +51,10 @@
 			<input id="btMassa" value="Ganhar massa" type="button" onclick="javascript:showProgramas(event);">
 			<input id="btCardio" value="Aumentar cardio" type="button" onclick="javascript:showProgramas(event);">
 		</div>
+
+		<p><a href="#" onclick="showAlert(); return false;">Show Alert</a></p>
+	    <p><a href="#" onclick="playBeep(); return false;">Play Beep</a></p>
+	    <p><a href="#" onclick="vibrate(); return false;">Vibrate</a></p>
 
 	</body>
 	<script type="text/javascript">
