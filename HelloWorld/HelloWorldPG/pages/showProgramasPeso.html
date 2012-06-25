@@ -2,10 +2,48 @@
 <html>
 	<head>
 		<title>Programas para perder peso</title>
+		<script type="text/javascript" src="../js/jquery-1.7.2.min.js"></script>
+		<style type="text/css">
+			.d-none {
+				display: none;
+			}
+		</style>
 	</head>
 
 	<body>
 		<h1>Programas para perder peso</h1>
-		Para de comer porra!
+		Para de comer porra! <br>
+		Selecione o seu nível:
+		<select onchange="javascript:showDivNivel(event);">
+			<option value="Selecione" onclick="javascript:showDivNivel(event);">Selecione</option>
+			<option value="Iniciante" onselect="javascript:showDivNivel(event);">Iniciante</option>
+			<option value="Intermediario" onselect="javascript:showDivNivel(event);">Intermediário</option>
+			<option value="Avancado" onselect="javascript:showDivNivel(event);">Avançado</option>
+		</select>
+		<div id="divNiveis">
+			<div id="divIniciante" class="d-none">Nível Iniciante</div>
+			<div id="divIntermediario" class="d-none">Nível Intermediário</div>
+			<div id="divAvancado" class="d-none">Nível Avançado</div>
+		</div>
 	</body>
+	
+	<script type="text/javascript">
+		function showDivNivel(e) {
+			var nomeOpt = e.target.value;
+			
+			if (nomeOpt == 'Selecione') {
+				$('#divNiveis div').each(function(index) {
+					$(this).hide();
+				});
+			} else {
+				$('#divNiveis div').each(function(index) {
+				    if ($(this).attr('id') == 'div'+nomeOpt) {
+				    	$(this).show();
+				    } else {
+				    	$(this).hide();
+				    }
+				});
+			}
+		}
+	</script>
 </html>

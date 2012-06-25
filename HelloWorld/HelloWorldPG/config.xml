@@ -16,5 +16,7 @@
     <author href="https://github.com/uchoabruno" email="uchoabruno@yahoo.com.br">
         Bruno Uchoa
     </author>
+    
+    <feature name="http://api.phonegap.com/1.0/notification"/>
 
 </widget>
