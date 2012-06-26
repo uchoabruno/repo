@@ -28,7 +28,7 @@
 		    // Beep three times
 		    //
 		    function playBeep() {
-		        navigator.notification.beep(3);
+		        navigator.notification.beep(2);
 		    }
 		
 		    // Vibrate for 2 seconds
@@ -48,7 +48,7 @@
 		<h1>Programas para perder peso</h1>
 		Para de comer porra! <br>
 		Selecione o seu nível:
-		<select onchange="javascript:showDivNivel(event);">
+		<select onchange="javascript:playBeep();">
 			<option value="Selecione" onclick="javascript:showDivNivel(event);">Selecione</option>
 			<option value="Iniciante" onselect="javascript:showDivNivel(event);">Iniciante</option>
 			<option value="Intermediario" onselect="javascript:showDivNivel(event);">Intermediário</option>
