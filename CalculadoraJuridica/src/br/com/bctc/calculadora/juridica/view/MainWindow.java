@@ -1,25 +1,43 @@
 package br.com.bctc.calculadora.juridica.view;
 
 import java.awt.EventQueue;
+import java.awt.HeadlessException;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 
 import javax.swing.JButton;
+import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.text.DefaultFormatterFactory;
+import javax.swing.text.NumberFormatter;
 
 import br.com.bctc.calculadora.juridica.controller.Controller;
+import java.awt.event.InputMethodListener;
+import java.awt.event.InputMethodEvent;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.io.IOException;
 
 public class MainWindow {
 
 	private JFrame frame;
-	private JTextField textFieldValorCausa;
+	private JFormattedTextField textFieldValorCausa;
 	private JTextField textFieldIndiceDist;
 	private JTextField textFieldIndiceAtual;
+	private JLabel lblResultado;
 	private Controller ctrl = new Controller();
 
 	/**
@@ -58,19 +76,53 @@ public class MainWindow {
 		lblValorDaCausa.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblValorDaCausa.setBounds(85, 3, 122, 14);
 		frame.getContentPane().add(lblValorDaCausa);
-		
-		textFieldValorCausa = new JTextField();
-		textFieldValorCausa.setBounds(212, 0, 86, 20);
+
+		textFieldValorCausa = new JFormattedTextField();
+		textFieldValorCausa.addKeyListener(new KeyAdapter() {
+			public void keyPressed(KeyEvent e) {
+				if ((e.getKeyCode() == KeyEvent.VK_V) && ((e.getModifiers() & KeyEvent.CTRL_MASK) != 0)) {
+					textFieldValorCausa.setText("");
+					try {
+						String clipboard = (String) Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor);
+						System.out.println("Tentando colar " + clipboard);
+						clipboard = clipboard.replace(".", "");
+						System.out.println("Colando " + clipboard);
+						textFieldValorCausa.setText(clipboard);
+					} catch (HeadlessException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (UnsupportedFlavorException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+                }
+			}
+		});
+		textFieldValorCausa.setBounds(212, 0, 100, 20);
 		frame.getContentPane().add(textFieldValorCausa);
 		textFieldValorCausa.setColumns(10);
-		
+
+		NumberFormatter defaultFormatter = new NumberFormatter(new DecimalFormat("#.##"));
+		NumberFormatter displayFormatter = new NumberFormatter(NumberFormat.getCurrencyInstance());
+		NumberFormatter editFormatter = new NumberFormatter(new DecimalFormat("#.##"));
+
+		defaultFormatter.setValueClass(Double.class);
+		displayFormatter.setValueClass(Double.class);
+		editFormatter.setValueClass(Double.class);
+
+		DefaultFormatterFactory salaryFactory = new DefaultFormatterFactory(defaultFormatter,displayFormatter,editFormatter);
+		textFieldValorCausa.setFormatterFactory(salaryFactory);
+
 		JLabel lblNewLabel = new JLabel("\u00CDndice Distribui\u00E7\u00E3o");
 		lblNewLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblNewLabel.setBounds(54, 28, 157, 14);
 		frame.getContentPane().add(lblNewLabel);
 		
 		textFieldIndiceDist = new JTextField();
-		textFieldIndiceDist.setBounds(212, 25, 86, 20);
+		textFieldIndiceDist.setBounds(212, 25, 100, 20);
 		frame.getContentPane().add(textFieldIndiceDist);
 		textFieldIndiceDist.setColumns(10);
 		
@@ -80,18 +132,18 @@ public class MainWindow {
 		frame.getContentPane().add(lblNewLabel_1);
 		
 		textFieldIndiceAtual = new JTextField();
-		textFieldIndiceAtual.setBounds(212, 50, 86, 20);
+		textFieldIndiceAtual.setBounds(212, 50, 100, 20);
 		frame.getContentPane().add(textFieldIndiceAtual);
 		textFieldIndiceAtual.setColumns(10);
 		
-		final JLabel lblResultado = new JLabel("");
+		lblResultado = new JLabel("");
 		lblResultado.setBounds(189, 114, 157, 14);
 		frame.getContentPane().add(lblResultado);
 		
 		JButton btnCalcular = new JButton("Calcular");
 		btnCalcular.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				lblResultado.setText(ctrl.atualizaValorCausa(Double.parseDouble(textFieldValorCausa.getText()), Double.parseDouble(textFieldIndiceDist.getText()),
+				lblResultado.setText(ctrl.atualizaValorCausa((double) textFieldValorCausa.getValue(), Double.parseDouble(textFieldIndiceDist.getText()),
 						Double.parseDouble(textFieldIndiceAtual.getText())));
 			}
 		});
