@@ -4,9 +4,9 @@ import java.text.NumberFormat;
 
 public class Controller {
 
-	public double atualizaValorCausa(double valorCausa, double indiceDistribuicao, double indiceAtual) {
+	public String atualizaValorCausa(double valorCausa, double indiceDistribuicao, double indiceAtual) {
 
-		return valorCausa/indiceDistribuicao*indiceAtual;
+		return format(valorCausa/indiceDistribuicao*indiceAtual);
 	}
 	
 	public double getValorPreparo(double valorCausaAtualizado) {
@@ -20,6 +20,7 @@ public class Controller {
 		nf.setMaximumFractionDigits(2);
 
 		//TODO Remover syso.
+		//TODO Ver com a Talita se é pra truncar ou arrendondar os valores dos cálculos.
 		System.out.println(Math.floor(valor*100)/100);
 		System.out.println("Valor formatado: " + nf.format(valor));
 		System.out.println("Valor bruto: " + valor);
