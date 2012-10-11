@@ -1,14 +1,8 @@
 package br.com.bctc.calculadora.juridica.view;
 
 import java.awt.EventQueue;
-import java.awt.HeadlessException;
-import java.awt.Toolkit;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
 import javax.swing.JButton;
@@ -23,21 +17,21 @@ import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.NumberFormatter;
 
 import br.com.bctc.calculadora.juridica.controller.Controller;
-import java.awt.event.InputMethodListener;
-import java.awt.event.InputMethodEvent;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.io.IOException;
+import br.com.bctc.calculadora.juridica.view.component.CustomFocusAdapter;
 
 public class MainWindow {
 
 	private JFrame frame;
-	private JFormattedTextField textFieldValorCausa;
+	private JFormattedTextField txtFldValorCausa;
 	private JTextField textFieldIndiceDist;
 	private JTextField textFieldIndiceAtual;
 	private JLabel lblResultado;
+
+	private NumberFormat valorDisplayFormat;
+    private NumberFormat valorEditFormat;
+    private NumberFormat percentDisplayFormat;
+    private NumberFormat percentEditFormat;
+	
 	private Controller ctrl = new Controller();
 
 	/**
@@ -60,6 +54,7 @@ public class MainWindow {
 	 * Create the application.
 	 */
 	public MainWindow() {
+		setUpFormats();
 		initialize();
 	}
 
@@ -72,65 +67,37 @@ public class MainWindow {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
-		JLabel lblValorDaCausa = new JLabel("Valor da Causa");
+		JLabel lblValorDaCausa = new JLabel("Valor da Causa: R$");
 		lblValorDaCausa.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblValorDaCausa.setBounds(85, 3, 122, 14);
 		frame.getContentPane().add(lblValorDaCausa);
 
-		textFieldValorCausa = new JFormattedTextField();
-		textFieldValorCausa.addKeyListener(new KeyAdapter() {
-			public void keyPressed(KeyEvent e) {
-				if ((e.getKeyCode() == KeyEvent.VK_V) && ((e.getModifiers() & KeyEvent.CTRL_MASK) != 0)) {
-					textFieldValorCausa.setText("");
-					try {
-						String clipboard = (String) Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor);
-						System.out.println("Tentando colar " + clipboard);
-						clipboard = clipboard.replace(".", "");
-						System.out.println("Colando " + clipboard);
-						textFieldValorCausa.setText(clipboard);
-					} catch (HeadlessException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					} catch (UnsupportedFlavorException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-                }
-			}
-		});
-		textFieldValorCausa.setBounds(212, 0, 100, 20);
-		frame.getContentPane().add(textFieldValorCausa);
-		textFieldValorCausa.setColumns(10);
+		txtFldValorCausa = new JFormattedTextField(
+				new DefaultFormatterFactory(
+						new NumberFormatter(valorDisplayFormat),
+						new NumberFormatter(valorDisplayFormat),
+						new NumberFormatter(valorEditFormat)));
 
-		NumberFormatter defaultFormatter = new NumberFormatter(new DecimalFormat("#.##"));
-		NumberFormatter displayFormatter = new NumberFormatter(NumberFormat.getCurrencyInstance());
-		NumberFormatter editFormatter = new NumberFormatter(new DecimalFormat("#.##"));
+		txtFldValorCausa.setBounds(212, 0, 100, 20);
+		frame.getContentPane().add(txtFldValorCausa);
+		txtFldValorCausa.setColumns(10);
 
-		defaultFormatter.setValueClass(Double.class);
-		displayFormatter.setValueClass(Double.class);
-		editFormatter.setValueClass(Double.class);
-
-		DefaultFormatterFactory salaryFactory = new DefaultFormatterFactory(defaultFormatter,displayFormatter,editFormatter);
-		textFieldValorCausa.setFormatterFactory(salaryFactory);
-
-		JLabel lblNewLabel = new JLabel("\u00CDndice Distribui\u00E7\u00E3o");
+		JLabel lblNewLabel = new JLabel("\u00CDndice Distribui\u00E7\u00E3o:");
 		lblNewLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblNewLabel.setBounds(54, 28, 157, 14);
 		frame.getContentPane().add(lblNewLabel);
-		
+
 		textFieldIndiceDist = new JTextField();
+		textFieldIndiceDist.addFocusListener(new CustomFocusAdapter());
 		textFieldIndiceDist.setBounds(212, 25, 100, 20);
 		frame.getContentPane().add(textFieldIndiceDist);
 		textFieldIndiceDist.setColumns(10);
 		
-		JLabel lblNewLabel_1 = new JLabel("\u00CDndice Atual");
+		JLabel lblNewLabel_1 = new JLabel("\u00CDndice Atual:");
 		lblNewLabel_1.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblNewLabel_1.setBounds(54, 53, 153, 14);
 		frame.getContentPane().add(lblNewLabel_1);
-		
+
 		textFieldIndiceAtual = new JTextField();
 		textFieldIndiceAtual.setBounds(212, 50, 100, 20);
 		frame.getContentPane().add(textFieldIndiceAtual);
@@ -143,8 +110,11 @@ public class MainWindow {
 		JButton btnCalcular = new JButton("Calcular");
 		btnCalcular.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				lblResultado.setText(ctrl.atualizaValorCausa((double) textFieldValorCausa.getValue(), Double.parseDouble(textFieldIndiceDist.getText()),
-						Double.parseDouble(textFieldIndiceAtual.getText())));
+				lblResultado.setText(ctrl.atualizaValorCausa(
+						(long) txtFldValorCausa.getValue(),
+						Double.parseDouble(textFieldIndiceDist.getText().replace(",", ".")),
+						Double.parseDouble(textFieldIndiceAtual.getText().replace(",", "."))
+						));
 			}
 		});
 		btnCalcular.setBounds(54, 105, 89, 23);
@@ -163,4 +133,18 @@ public class MainWindow {
 		JMenu mnSair = new JMenu("Sair");
 		mnArquivo.add(mnSair);
 	}
+	
+	private void setUpFormats() {
+
+		valorDisplayFormat = NumberFormat.getNumberInstance();
+        valorDisplayFormat.setMinimumFractionDigits(2);
+        valorEditFormat = NumberFormat.getNumberInstance();
+
+        percentDisplayFormat = NumberFormat.getPercentInstance();
+        percentDisplayFormat.setMinimumFractionDigits(2);
+        percentDisplayFormat.setMaximumFractionDigits(10);
+        percentEditFormat = NumberFormat.getNumberInstance();
+        percentEditFormat.setMinimumFractionDigits(2);
+        percentEditFormat.setMaximumFractionDigits(10);
+    }
 }

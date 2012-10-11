@@ -4,7 +4,7 @@ import java.text.NumberFormat;
 
 public class Controller {
 
-	public String atualizaValorCausa(double valorCausa, double indiceDistribuicao, double indiceAtual) {
+	public String atualizaValorCausa(long valorCausa, double indiceDistribuicao, double indiceAtual) {
 
 		return format(valorCausa/indiceDistribuicao*indiceAtual);
 	}

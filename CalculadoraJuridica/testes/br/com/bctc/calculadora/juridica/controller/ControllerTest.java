@@ -10,7 +10,7 @@ public class ControllerTest {
 
 	@Test
 	public void test() {
-		assertEquals(11295.17, controller.atualizaValorCausa(10900, 46.007257, 47.675238));
+		assertEquals(11295.17, controller.atualizaValorCausa(10900l, (long) 46.007257, (long) 47.675238));
 	}
 
 }
