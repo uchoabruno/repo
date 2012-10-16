@@ -17,6 +17,7 @@ import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.NumberFormatter;
 
 import br.com.bctc.calculadora.juridica.controller.Controller;
+import br.com.bctc.calculadora.juridica.utils.StaticTexts;
 import br.com.bctc.calculadora.juridica.view.component.CustomFocusAdapter;
 
 public class MainWindow {
@@ -26,6 +27,8 @@ public class MainWindow {
 	private JTextField textFieldIndiceDist;
 	private JTextField textFieldIndiceAtual;
 	private JLabel lblResultado;
+
+	private static JLabel lblErrors = new JLabel("");
 
 	private NumberFormat valorDisplayFormat;
     private NumberFormat valorEditFormat;
@@ -77,7 +80,7 @@ public class MainWindow {
 						new NumberFormatter(valorDisplayFormat),
 						new NumberFormatter(valorDisplayFormat),
 						new NumberFormatter(valorEditFormat)));
-
+		txtFldValorCausa.setToolTipText(StaticTexts.TOOL_TIP_TEXT_VALOR_CAUSA);
 		txtFldValorCausa.setBounds(212, 0, 100, 20);
 		frame.getContentPane().add(txtFldValorCausa);
 		txtFldValorCausa.setColumns(10);
@@ -87,7 +90,12 @@ public class MainWindow {
 		lblNewLabel.setBounds(54, 28, 157, 14);
 		frame.getContentPane().add(lblNewLabel);
 
-		textFieldIndiceDist = new JTextField();
+		//textFieldIndiceDist = new JTextField();
+		textFieldIndiceDist = new JFormattedTextField(
+				new DefaultFormatterFactory(
+						new NumberFormatter(percentDisplayFormat),
+						new NumberFormatter(percentDisplayFormat),
+						new NumberFormatter(percentEditFormat)));
 		textFieldIndiceDist.addFocusListener(new CustomFocusAdapter());
 		textFieldIndiceDist.setBounds(212, 25, 100, 20);
 		frame.getContentPane().add(textFieldIndiceDist);
@@ -98,7 +106,12 @@ public class MainWindow {
 		lblNewLabel_1.setBounds(54, 53, 153, 14);
 		frame.getContentPane().add(lblNewLabel_1);
 
-		textFieldIndiceAtual = new JTextField();
+		//textFieldIndiceAtual = new JTextField();
+		textFieldIndiceAtual = new JFormattedTextField(
+				new DefaultFormatterFactory(
+						new NumberFormatter(percentDisplayFormat),
+						new NumberFormatter(percentDisplayFormat),
+						new NumberFormatter(percentEditFormat)));
 		textFieldIndiceAtual.setBounds(212, 50, 100, 20);
 		frame.getContentPane().add(textFieldIndiceAtual);
 		textFieldIndiceAtual.setColumns(10);
@@ -120,9 +133,8 @@ public class MainWindow {
 		btnCalcular.setBounds(54, 105, 89, 23);
 		frame.getContentPane().add(btnCalcular);
 		
-		JLabel lblValorAtualizado = new JLabel("Valor Atualizado");
-		lblValorAtualizado.setBounds(344, 114, 46, 14);
-		frame.getContentPane().add(lblValorAtualizado);
+		lblErrors.setBounds(10, 216, 414, 14);
+		frame.getContentPane().add(lblErrors);
 		
 		JMenuBar menuBar = new JMenuBar();
 		frame.setJMenuBar(menuBar);
@@ -133,16 +145,31 @@ public class MainWindow {
 		JMenu mnSair = new JMenu("Sair");
 		mnArquivo.add(mnSair);
 	}
+
+	public static void exibeErros(String erro) {
+
+		lblErrors.setText(erro);
+	}
+
+	public static void limpaErros() {
+
+		lblErrors.setText("");
+	}
 	
 	private void setUpFormats() {
 
 		valorDisplayFormat = NumberFormat.getNumberInstance();
         valorDisplayFormat.setMinimumFractionDigits(2);
-        valorEditFormat = NumberFormat.getNumberInstance();
+        valorDisplayFormat.setMaximumFractionDigits(2);
 
-        percentDisplayFormat = NumberFormat.getPercentInstance();
+        valorEditFormat = NumberFormat.getNumberInstance();
+        valorEditFormat.setMinimumFractionDigits(2);
+        valorEditFormat.setMaximumFractionDigits(2);
+
+        percentDisplayFormat = NumberFormat.getNumberInstance();
         percentDisplayFormat.setMinimumFractionDigits(2);
         percentDisplayFormat.setMaximumFractionDigits(10);
+
         percentEditFormat = NumberFormat.getNumberInstance();
         percentEditFormat.setMinimumFractionDigits(2);
         percentEditFormat.setMaximumFractionDigits(10);
