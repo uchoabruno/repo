@@ -123,11 +123,15 @@ public class MainWindow {
 		JButton btnCalcular = new JButton("Calcular");
 		btnCalcular.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				lblResultado.setText(ctrl.atualizaValorCausa(
-						(long) txtFldValorCausa.getValue(),
-						Double.parseDouble(textFieldIndiceDist.getText().replace(",", ".")),
-						Double.parseDouble(textFieldIndiceAtual.getText().replace(",", "."))
-						));
+				try {
+					lblResultado.setText(ctrl.atualizaValorCausa(
+							(long) txtFldValorCausa.getValue(),
+							Double.parseDouble(textFieldIndiceDist.getText().replace(",", ".")),
+							Double.parseDouble(textFieldIndiceAtual.getText().replace(",", "."))
+							));
+				} catch (Exception e) {
+					exibeErros(e.getMessage());
+				}
 			}
 		});
 		btnCalcular.setBounds(54, 105, 89, 23);
