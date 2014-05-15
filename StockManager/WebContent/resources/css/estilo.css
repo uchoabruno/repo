@@ -1,0 +1,7 @@
+@CHARSET "ISO-8859-1";
+td.true {
+	background-color: #8EDD8E;
+}
+td.false {
+	background-color: red;
+}
