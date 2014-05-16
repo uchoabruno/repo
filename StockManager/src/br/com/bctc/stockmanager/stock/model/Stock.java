@@ -1,19 +1,42 @@
-package br.com.bctc.stockmanager.model;
+package br.com.bctc.stockmanager.stock.model;
 
 import java.util.Calendar;
 
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
+
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+
+@DynamicInsert
+@DynamicUpdate
+@Table(name = "stock", schema = "test", uniqueConstraints = {
+		@UniqueConstraint(columnNames = "STOCK_NAME"),
+		@UniqueConstraint(columnNames = "STOCK_CODE")
+})
 public class Stock {
 
-	private String codigo;
 	private Calendar dataCompra;
 	private Calendar dataVenda;
+	private Integer stockId;
+	private String codigo;
 	private String desc;
-	private int quantidade;
 	private float valorAtual;
 	private float valorCompra;
 	private float valorVenda;
+	private int quantidade;
 
-
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "STOCK_ID", unique = true, nullable = false)
+	public Integer getStockId() {
+		return this.stockId;
+	}
+	@Column(name = "STOCK_CODE", unique = true, nullable = false, length = 10)
 	public String getCodigo() {
 		return codigo;
 	}
@@ -23,6 +46,7 @@ public class Stock {
 	public Calendar getDataVenda() {
 		return dataVenda;
 	}
+	@Column(name = "STOCK_NAME", unique = true, nullable = false, length = 20)
 	public String getDesc() {
 		return desc;
 	}
@@ -37,6 +61,9 @@ public class Stock {
 	}
 	public float getValorVenda() {
 		return valorVenda;
+	}
+	public void setStockId(Integer stockId) {
+		this.stockId = stockId;
 	}
 	public void setCodigo(String codigo) {
 		this.codigo = codigo;
