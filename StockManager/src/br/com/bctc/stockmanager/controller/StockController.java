@@ -30,8 +30,22 @@ public class StockController {
 	public String showHomeMessage(Model model) {
 
 		model.addAttribute(new Stock());
-		System.out.println(stock.toString());
+		
+		stock.setCodigo("PETR3F");
+		stock.setDesc("Petrobras");
+		stockDao.save(stock);
+		
+		Stock s = new Stock();
+		s.setCodigo("LIGT3F");
+		s.setDesc("Light");
+		stockDao.save(s);
+		
+		System.out.println("ID = " + stock.getStockId());
+		
+		Stock stock2 = stockDao.findByStockCode("PETR3F");
+		System.out.println("ID = " + stock2.getStockId());
 
+		System.out.println(stock2.getDesc());
 		return "acoes";
 	}
 

@@ -3,8 +3,8 @@ package br.com.bctc.stockmanager.stock.model;
 import java.util.Calendar;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
@@ -14,6 +14,7 @@ import org.hibernate.annotations.DynamicUpdate;
 
 @DynamicInsert
 @DynamicUpdate
+@Entity
 @Table(name = "stock", schema = "test", uniqueConstraints = {
 		@UniqueConstraint(columnNames = "STOCK_NAME"),
 		@UniqueConstraint(columnNames = "STOCK_CODE")
@@ -31,7 +32,7 @@ public class Stock {
 	private int quantidade;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue
 	@Column(name = "STOCK_ID", unique = true, nullable = false)
 	public Integer getStockId() {
 		return this.stockId;
@@ -89,11 +90,9 @@ public class Stock {
 	public void setValorVenda(float valorVenda) {
 		this.valorVenda = valorVenda;
 	}
-
 	public void valorAtualUp() {
 		setValorAtual(valorAtual+0.01f);
 	}
-
 	public void valorAtualDown() {
 		setValorAtual(valorAtual-0.01f);
 	}
