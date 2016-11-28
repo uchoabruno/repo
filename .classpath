@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="CalculadoraJuridica/src"/>
+	<classpathentry kind="src" path="CalculadoraJuridica/testes"/>
+	<classpathentry kind="src" path="StockManager/src"/>
+	<classpathentry kind="lib" path="myApp/sdk/command/vendor/nodejs/node_modules/jasmine-node/node_modules/jasmine-reporters/ext/jline.jar"/>
+	<classpathentry kind="lib" path="myApp/sdk/command/vendor/nodejs/node_modules/jasmine-node/node_modules/jasmine-reporters/ext/js.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="output" path="StockManager/WebContent/WEB-INF/classes"/>
+</classpath>

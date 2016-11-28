@@ -1,0 +1,43 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Getting Started: Serving Web Content</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+	<a th:href="@{'/kalahBoard'}" ><span>Reset?</span></a>
+	<p th:text="'Hello, player ' + ${currentPlayer.name} + '. It\'s your turn!' " />
+	<div style="width: 58px; height: 68px; border-style: solid; float: left;">
+		<span th:text="${houses[13].qtyStones}" ></span>
+	</div>
+	<div style=" float: left; width: 175px; height:68px; border-style: solid;">
+		<div style="height:34px; border-bottom: inherit;">
+		    <a th:text="${houses[12].qtyStones}" th:href="@{'/moveStones/12'}"></a>
+		    <a th:text="${houses[11].qtyStones}" th:href="@{'/moveStones/11'}"></a>
+		    <a th:text="${houses[10].qtyStones}" th:href="@{'/moveStones/10'}"></a>
+		    <a th:text="${houses[9].qtyStones}" th:href="@{'/moveStones/9'}"></a>
+		    <a th:text="${houses[8].qtyStones}" th:href="@{'/moveStones/8'}"></a>
+		    <a th:text="${houses[7].qtyStones}" th:href="@{'/moveStones/7'}"></a>
+		</div>
+		<div style="height:34px;">
+			<a th:text="${houses[0].qtyStones}" th:href="@{'/moveStones/0'}"></a>
+		    <a th:text="${houses[1].qtyStones}" th:href="@{'/moveStones/1'}"></a>
+		    <a th:text="${houses[2].qtyStones}" th:href="@{'/moveStones/2'}"></a>
+		    <a th:text="${houses[3].qtyStones}" th:href="@{'/moveStones/3'}"></a>
+		    <a th:text="${houses[4].qtyStones}" th:href="@{'/moveStones/4'}"></a>
+		    <a th:text="${houses[5].qtyStones}" th:href="@{'/moveStones/5'}"></a>
+		</div>
+	</div>
+	<div style="width: 58px; height: 68px; border-style: solid; float: left;">
+    	<span th:text="${houses[6].qtyStones}" style="text-align: center;" ></span>
+	</div>    
+	<p th:text="${errorMessage}" th:unless="${availableMessage}" />
+	<div th:if="${availableMessage}" th:unless="${gameOverMessage}" >
+		<p th:text="${availableMessage}" />
+		<a th:href="@{'/verifyWinner'}" ><span>Check who won!</span></a>
+	</div>
+	<div th:if="${gameOverMessage}">
+		<p th:text="${gameOverMessage}" />
+	</div>
+</body>
+</html>
